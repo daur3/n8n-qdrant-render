@@ -1,5 +1,4 @@
 services:
-  # 1. Сервис Qdrant
   - type: web
     name: qdrant-db
     env: docker
@@ -11,7 +10,6 @@ services:
       - key: QDRANT__SERVICE__HTTP_PORT
         value: "6333"
 
-  # 2. Сервис n8n
   - type: web
     name: n8n-automation
     env: docker
