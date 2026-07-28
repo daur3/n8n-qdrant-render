@@ -1,0 +1,38 @@
+services:
+  # 1. Сервис Qdrant (Векторная база знаний)
+  - type: web
+    name: qdrant-db
+    env: docker
+    region: frankfurt
+    plan: free # Или starter для постоянной работы без отключений
+    image:
+      url: qdrant/qdrant:latest
+    envVars:
+      - key: QDRANT__SERVICE__HTTP_PORT
+        value: 6333
+    disk:
+      name: qdrant-data
+      mountPath: /qdrant/storage
+      sizeGB: 1
+
+  # 2. Сервис n8n (Автоматизация и AI-агент)
+  - type: web
+    name: n8n-automation
+    env: docker
+    region: frankfurt
+    plan: free
+    image:
+      url: docker.n8n.io/n8nio/n8n:latest
+    envVars:
+      - key: N8N_PORT
+        value: 5678
+      - key: N8N_PROTOCOL
+        value: https
+      - key: WEBHOOK_URL
+        value: https://n8n-automation.onrender.com/ # Замените n8n-automation на имя вашего сервиса
+      - key: GENERIC_TIMEZONE
+        value: Europe/Moscow
+    disk:
+      name: n8n-data
+      mountPath: /home/node/.n8n
+      sizeGB: 1
